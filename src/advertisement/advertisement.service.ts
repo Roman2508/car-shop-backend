@@ -19,6 +19,7 @@ export interface IAdvertisementQuery {
   сustomsСleared: string | undefined;
   engineVolume: string | undefined;
   theCarWasDrivenFrom: string | undefined;
+  model: string;
   yearOfRelease: string | undefined;
   carBodyType: string | undefined;
   seatsCount: string | undefined;

@@ -20,6 +20,9 @@ export class CreateAdvertisementDto {
   subcategory: string;
 
   @ApiProperty()
+  model: string;
+
+  @ApiProperty()
   carType: string;
 
   @ApiProperty()

@@ -43,6 +43,9 @@ export class AdvertisementEntity {
   theCarWasDrivenFrom?: string;
 
   @Column()
+  model: string;
+
+  @Column()
   yearOfRelease: number;
 
   @Column()
