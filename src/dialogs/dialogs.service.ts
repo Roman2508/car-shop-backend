@@ -17,11 +17,6 @@ export class DialogsService {
     return this.repository.save(dialog);
   }
 
-  // checkIsExist(tutorId: number, studentId: number) {
-  //   return this.repository.findOne({
-  //     where: { tutor: { id: tutorId }, student: { id: studentId } },
-  //   });
-  // }
 
   findAll(id: number) {
     return this.repository.find({

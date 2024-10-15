@@ -1,10 +1,4 @@
-import {
-  Column,
-  Entity,
-  ManyToOne,
-  CreateDateColumn,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, ManyToOne, CreateDateColumn, PrimaryGeneratedColumn } from 'typeorm';
 
 import { AdvertisementEntity } from 'src/advertisement/entities/advertisement.entity';
 
@@ -25,11 +19,8 @@ export class FileEntity {
   @Column()
   mimetype: string;
 
-  @ManyToOne(() => AdvertisementEntity, (ad) => ad.photos)
-  ad: AdvertisementEntity;
-
-  @Column()
-  authorRole: 'tutor' | 'student';
+  // @ManyToOne(() => AdvertisementEntity, (ad) => ad.photos)
+  // ad: AdvertisementEntity;
 
   @CreateDateColumn({
     type: 'timestamp',

@@ -54,7 +54,8 @@ export class FilesController {
     return this.filesService.uploadAvatar(file, headers);
   }
 
-  @Post(':adId')
+  @Post('')
+  // @Post(':adId')
   @UseInterceptors(FileInterceptor('file', { storage: fileStorage }))
   @ApiConsumes('multipart/form-data')
   @ApiBody({
@@ -76,9 +77,10 @@ export class FilesController {
     )
     file: Express.Multer.File,
     @Headers() headers: any,
-    @Param('adId') adId: string,
+    // @Param('adId') adId: string,
   ) {
-    return this.filesService.create(file, headers, +adId);
+    return this.filesService.create(file, headers);
+    // return this.filesService.create(file, headers, +adId);
   }
 
   @Get('/download/:filename')
@@ -88,10 +90,10 @@ export class FilesController {
     return new StreamableFile(file);
   }
 
-  @Get(':adId')
-  findAll(@Param('adId') adId: string) {
-    return this.filesService.findAll(+adId);
-  }
+  // @Get(':adId')
+  // findAll(@Param('adId') adId: string) {
+  //   return this.filesService.findAll(+adId);
+  // }
 
   @Delete(':filename/:id')
   remove(@Param('filename') filename: string, @Param('id') id: string) {

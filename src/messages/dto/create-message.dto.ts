@@ -14,5 +14,5 @@ export class CreateMessageDto {
   dialog: number;
 
   @ApiProperty()
-  userRole: 'tutor' | 'student';
+  userRole: any;
 }

@@ -16,7 +16,8 @@ export class FilesService {
     private userService: UserService,
   ) {}
 
-  async create(file: Express.Multer.File, headers: any, adId: number) {
+  // async create(file: Express.Multer.File, headers: any, adId: number) {
+  async create(file: Express.Multer.File, headers: any) {
     const token = headers.authorization.replace('Bearer ', '');
     const userData = this.authService.decodeToken(token);
 
@@ -25,9 +26,8 @@ export class FilesService {
       originalName: file.originalname,
       size: file.size,
       mimetype: file.mimetype,
-      ad: { id: adId },
+      // ad: { id: adId },
       user: { id: userData.id },
-      authorRole: userData.userRole,
     });
 
     return this.repository.findOne({
@@ -35,7 +35,6 @@ export class FilesService {
       select: {
         id: true,
         originalName: true,
-        authorRole: true,
         createdAt: true,
         filename: true,
         mimetype: true,
@@ -51,9 +50,9 @@ export class FilesService {
     return { ...userData, avatarUrl: file.filename };
   }
 
-  findAll(adId: number) {
-    return this.repository.findOneBy({ ad: { id: adId } });
-  }
+  // findAll(adId: number) {
+  //   return this.repository.findOneBy({ ad: { id: adId } });
+  // }
 
   async remove(filename: string, id: number) {
     const res = await this.repository.delete(id);
