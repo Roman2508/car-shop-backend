@@ -11,6 +11,7 @@ import {
 } from 'typeorm';
 
 import { DialogEntity } from 'src/dialogs/entities/dialog.entity';
+import { AdvertisementEntity } from 'src/advertisement/entities/advertisement.entity';
 
 export enum UserRoles {
   ADMIN = 'ADMIN',
@@ -52,6 +53,12 @@ export class UserEntity {
   @ManyToMany(() => DialogEntity, (dialog) => dialog.members)
   @JoinColumn({ name: 'dialogs' })
   dialogs: DialogEntity[];
+
+  @OneToMany(() => AdvertisementEntity, (ad) => ad.user, {
+    cascade: true,
+  })
+  @JoinColumn({ name: 'advertisements' })
+  advertisements: AdvertisementEntity[];
 
   @CreateDateColumn()
   createdAt: Date;

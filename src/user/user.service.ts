@@ -36,11 +36,11 @@ export class UserService {
       email: dto.email,
       role: dto.role,
       username: dto.username,
+      advertisements: [],
     };
 
     const newUser = this.repository.create(userPayload);
-
-    return await this.repository.save(newUser);
+    return this.repository.save(newUser);
   }
 
   findByFields() {

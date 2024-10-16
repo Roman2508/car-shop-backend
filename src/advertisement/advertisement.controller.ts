@@ -1,10 +1,11 @@
 import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 
 import { JwtAuthGuard } from 'src/auth/guards/jwt.guard';
 import { AdvertisementService } from './advertisement.service';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
 import { UpdateAdvertisementDto } from './dto/update-advertisement.dto';
+import { GetAdvertisementQueryDto } from './dto/get-advertisement.query.dto';
 
 @Controller('advertisement')
 @ApiTags('advertisement')
@@ -19,9 +20,8 @@ export class AdvertisementController {
   }
 
   @Get()
-  // @ApiQuery({ name: 'stream', type: String, required: false })
-  paginateAndFilter() {
-    // return this.advertisementService.paginateAndFilter();
+  paginateAndFilter(@Query() query: GetAdvertisementQueryDto) {
+    return this.advertisementService.paginateAndFilter(query);
   }
 
   @Get(':id')

@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
 import { UpdateAdvertisementDto } from './dto/update-advertisement.dto';
-import { Between, LessThan, MoreThan, Not, Raw, Repository } from 'typeorm';
+import { Between, ILike, LessThan, MoreThan, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdvertisementEntity } from './entities/advertisement.entity';
 
@@ -35,35 +35,6 @@ export interface IAdvertisementQuery {
   security: string | undefined;
 }
 
-
-//  {
-//     "title": "Продаж авто Tesla model Y",
-//     "description": "Продаж авто Tesla model Y, пригнана з США",
-//     "price": 1771781,
-//     "category": "Легкові автомобілі",
-//     "subcategory": "Tesla",
-//     "carType": "З пробігом",
-//     "mileage": 1300,
-//     "сustomsСleared": "Так",
-//     "engineVolume": 3,
-//     "theCarWasDrivenFrom": "США",
-//     "yearOfRelease": 2021,
-//     "carBodyType": "Седан",
-//     "seatsCount": 4,
-//     "color": "Білий",
-//     "gearbox": "Автомат",
-//     "driveType": "Повний",
-//     "fuelType": "Електро",
-//     "varnishCoating": "Як нове, без видимих слідів експлуатації",
-//     "technicalCondition": ["На ходу, технічно справна", "Не бита", "Не пофарбована"],
-//     "comfort": ["Електропакет", "Електросклопідйомники", "Шкіряний салон"],
-//     "multimedia": ["AUX"],
-//     "security": ["Броньований автомобіль"],
-//     "photos": ["https://hvylya.net/images/2024/09/04/kbZ2HqVKTBTQx0jZwdUFG0jnpCMdX4C4yKRvDm6g.jpeg", "https://24tv.ua/resources/photos/news/202112/1812341.jpg?v=1661258202000", "https://res.cloudinary.com/unix-center/image/upload/c_limit,dpr_3.0,f_auto,fl_progressive,g_center,h_240,q_auto:good,w_385/supetg7hjl8wo0nr3xtq.jpg"],
-//     "user": 1
-//   }
-
-
 @Injectable()
 export class AdvertisementService {
   constructor(
@@ -76,6 +47,10 @@ export class AdvertisementService {
       query;
 
     const filter = {} as any;
+
+    if (query.title) {
+      filter.title = ILike(`%${query.title}%`);
+    }
 
     if (priceFrom && priceTo) {
       filter.price = Between(+priceFrom, +priceTo);
@@ -107,8 +82,9 @@ export class AdvertisementService {
 
     return this.repository.findAndCount({
       where: { ...filterParams, ...filter },
-      take: limit,
-      skip: offset,
+      relations: { photos: true },
+      take: limit ? limit : 20,
+      skip: offset ? offset : 0,
       // order: { id: 'ASC' },
     });
   }
@@ -151,11 +127,26 @@ export class AdvertisementService {
   create(dto: CreateAdvertisementDto) {
     const photos = dto.photos ? dto.photos.map((el) => ({ id: Number(el) })) : [];
 
+    const newAdvertisement = {} as CreateAdvertisementDto;
+
+    for (const key in dto) {
+      const typeNumberValues = ['price', 'mileage', 'engineVolume', 'yearOfRelease'];
+
+      if (typeNumberValues.some((el) => el === key)) {
+        newAdvertisement[key] = Number(dto[key]);
+      } else {
+        newAdvertisement[key] = dto[key];
+      }
+    }
+
     const ad = this.repository.create({
-      ...dto,
-      photos,
+      ...newAdvertisement,
+      status: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ',
       user: { id: dto.user },
+      photos,
+      // photos: [],
     });
+
     return this.repository.save(ad);
   }
 

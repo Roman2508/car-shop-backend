@@ -12,14 +12,11 @@ export class AdvertisementEntity {
   title: string;
 
   @Column()
-  description: string;
-
-  @Column()
   price: number;
 
   // АКТИВНЕ | НЕАКТИВНЕ | ОЧІКУЄ ПІДТВЕРДЖЕННЯ
   @Column({ default: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ' })
-  status?: string;
+  status: string;
 
   @Column()
   category: string;
@@ -34,12 +31,12 @@ export class AdvertisementEntity {
   mileage: number;
 
   @Column()
-  сustomsСleared?: string;
+  сustomsСleared: string;
 
-  @Column()
+  @Column({ default: null })
   engineVolume?: number;
 
-  @Column()
+  @Column({ default: null })
   theCarWasDrivenFrom?: string;
 
   @Column()
@@ -51,7 +48,7 @@ export class AdvertisementEntity {
   @Column()
   carBodyType: string;
 
-  @Column()
+  @Column({ default: null })
   seatsCount?: number;
 
   @Column()
@@ -69,6 +66,7 @@ export class AdvertisementEntity {
   @Column()
   varnishCoating: string;
 
+  // @Column('simple-json', { default: [] })
   @Column('text', { array: true, default: [] })
   technicalCondition: string[];
 
@@ -81,10 +79,10 @@ export class AdvertisementEntity {
   @Column('text', { array: true, default: [] })
   security?: string[];
 
-  @OneToMany(() => FileEntity, (file) => file.id, { onDelete: 'CASCADE' })
+  @OneToMany(() => FileEntity, (file) => file.ad, { onDelete: 'CASCADE' })
   photos: FileEntity[];
 
-  @ManyToOne(() => UserEntity, (user) => user.id)
+  @ManyToOne(() => UserEntity, (user) => user.advertisements)
   @JoinColumn({ name: 'user' })
   user: UserEntity;
 
