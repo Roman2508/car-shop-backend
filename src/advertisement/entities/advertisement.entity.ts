@@ -11,6 +11,9 @@ export class AdvertisementEntity {
   @Column()
   title: string;
 
+  @Column({ default: null })
+  description: string;
+
   @Column()
   price: number;
 

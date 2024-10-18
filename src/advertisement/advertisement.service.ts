@@ -159,8 +159,25 @@ export class AdvertisementService {
   }
 
   async accept(id: number) {
-    const ad = await this.repository.findOne({ where: { id, status: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ' } });
-    return this.repository.save({ ...ad, status: 'АКТИВНЕ' });
+    const ad = await this.repository.findOne({ where: { id } });
+
+    if (!ad) throw new NotFoundException('Оголошення не знайдено!');
+    if (ad.status === 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ') {
+      console.log(ad.status);
+      return this.repository.save({ ...ad, status: 'АКТИВНЕ' });
+    }
+
+    if (ad.status === 'АКТИВНЕ') {
+      console.log(ad.status);
+      return this.repository.save({ ...ad, status: 'НЕАКТИВНЕ' });
+    }
+
+    if (ad.status === 'НЕАКТИВНЕ') {
+      console.log(ad.status);
+      return this.repository.save({ ...ad, status: 'АКТИВНЕ' });
+    }
+
+    throw new NotFoundException('An unexpected error occurred');
   }
 
   async remove(id: number) {

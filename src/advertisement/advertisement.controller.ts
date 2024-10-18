@@ -33,6 +33,10 @@ export class AdvertisementController {
   update(@Param('id') id: string, @Body() dto: UpdateAdvertisementDto) {
     return this.advertisementService.update(+id, dto);
   }
+  @Patch('accept/:id')
+  accept(@Param('id') id: string) {
+    return this.advertisementService.accept(+id);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {
