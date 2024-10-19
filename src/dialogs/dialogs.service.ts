@@ -1,8 +1,9 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
-import { CreateDialogDto } from './dto/create-dialog.dto';
-import { InjectRepository } from '@nestjs/typeorm';
-import { DialogEntity } from './entities/dialog.entity';
 import { Repository } from 'typeorm';
+import { InjectRepository } from '@nestjs/typeorm';
+import { Injectable, NotFoundException } from '@nestjs/common';
+
+import { DialogEntity } from './entities/dialog.entity';
+import { CreateDialogDto } from './dto/create-dialog.dto';
 
 @Injectable()
 export class DialogsService {
@@ -12,18 +13,38 @@ export class DialogsService {
   ) {}
 
   create(dto: CreateDialogDto) {
-    const members = dto.members.map((el) => ({ id: el }));
-    const dialog = this.repository.create({ members });
+    // Треба перевіряти чи такого діалогу ще немає
+    const members = dto.members.map((el) => ({ id: Number(el) }));
+    const dialog = this.repository.create({ members, advertisement: { id: dto.advertisement } });
     return this.repository.save(dialog);
   }
 
-
-  findAll(id: number) {
-    return this.repository.find({
+  async findById(id: number) {
+    const userAds = await this.repository.find({
       where: { members: { id } },
-      relations: { members: true },
-      select: { members: { id: true, username: true, avatarUrl: true } },
+      select: { id: true },
     });
+
+    const allAds = await Promise.all(
+      userAds.map(async (el) => {
+        return await this.repository.findOne({
+          where: { id: el.id },
+          relations: { members: true, advertisement: { photos: true } },
+          select: {
+            members: { id: true, username: true, avatarUrl: true },
+            advertisement: {
+              id: true,
+              title: true,
+              status: true,
+              photos: { id: true, filename: true },
+              createdAt: true,
+            },
+          },
+        });
+      }),
+    );
+
+    return allAds;
   }
 
   async remove(id: number) {

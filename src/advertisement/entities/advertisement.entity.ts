@@ -2,6 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 
 import { FileEntity } from 'src/files/entities/file.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
+import { DialogEntity } from 'src/dialogs/entities/dialog.entity';
 
 @Entity('advertisement')
 export class AdvertisementEntity {
@@ -88,6 +89,10 @@ export class AdvertisementEntity {
   @ManyToOne(() => UserEntity, (user) => user.advertisements)
   @JoinColumn({ name: 'user' })
   user: UserEntity;
+
+  // @OneToMany(() => DialogEntity, (dialog) => dialog.advertisement)
+  // @JoinColumn({ name: 'dialogs' })
+  // dialogs: DialogEntity[];
 
   @CreateDateColumn({
     type: 'timestamp',

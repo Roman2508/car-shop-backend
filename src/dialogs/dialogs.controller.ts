@@ -18,8 +18,8 @@ export class DialogsController {
   }
 
   @Get(':id')
-  findAll(@Param('id') id: string) {
-    return this.dialogsService.findAll(+id);
+  findById(@Param('id') id: string) {
+    return this.dialogsService.findById(+id);
   }
 
   @Delete(':id')

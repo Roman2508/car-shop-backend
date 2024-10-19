@@ -47,7 +47,7 @@ export class UserEntity {
   @Column({ default: null })
   phone?: number;
 
-  @Column({ type: 'enum', enum: UserRoles })
+  @Column({ type: 'enum', enum: UserRoles, default: UserRoles.USER })
   role: UserRoles;
 
   @ManyToMany(() => DialogEntity, (dialog) => dialog.members)
