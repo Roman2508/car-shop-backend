@@ -124,6 +124,14 @@ export class AdvertisementService {
     return this.repository.findOne({ where: { id }, relations: { user: true, photos: true } });
   }
 
+  getMy(id: number) {
+    return this.repository.find({ where: { user: { id } }, relations: { user: true, photos: true } });
+  }
+
+  getNotAccepted() {
+    return this.repository.find({ where: { status: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ' }, relations: { user: true, photos: true } });
+  }
+
   create(dto: CreateAdvertisementDto) {
     const photos = dto.photos ? dto.photos.map((el) => ({ id: Number(el) })) : [];
 

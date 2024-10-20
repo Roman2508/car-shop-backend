@@ -24,9 +24,19 @@ export class AdvertisementController {
     return this.advertisementService.paginateAndFilter(query);
   }
 
+  @Get('get-not-accepted')
+  getNotAccepted() {
+    return this.advertisementService.getNotAccepted();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.advertisementService.findOne(+id);
+  }
+
+  @Get('my/:id')
+  getMy(@Param('id') id: string) {
+    return this.advertisementService.getMy(+id);
   }
 
   @Patch(':id')

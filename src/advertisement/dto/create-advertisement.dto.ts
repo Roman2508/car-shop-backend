@@ -44,7 +44,7 @@ export class CreateAdvertisementDto {
   carBodyType: string;
 
   @ApiProperty()
-  seatsCount?: number;
+  seatsCount?: string;
 
   @ApiProperty()
   color: string;

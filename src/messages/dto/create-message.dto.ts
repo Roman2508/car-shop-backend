@@ -5,14 +5,8 @@ export class CreateMessageDto {
   text: string;
 
   @ApiProperty()
-  sender: {
-    id: number;
-    name: string;
-  };
+  sender: number;
 
   @ApiProperty()
   dialog: number;
-
-  @ApiProperty()
-  userRole: any;
 }

@@ -53,7 +53,7 @@ export class AdvertisementEntity {
   carBodyType: string;
 
   @Column({ default: null })
-  seatsCount?: number;
+  seatsCount?: string;
 
   @Column()
   color: string;

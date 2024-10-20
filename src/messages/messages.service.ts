@@ -13,7 +13,7 @@ export class MessagesService {
   ) {}
   async createMessage(dto: CreateMessageDto): Promise<MessageEntity> {
     const message = this.repository.create({
-      sender: { id: dto.sender.id },
+      sender: { id: dto.sender },
       dialog: { id: dto.dialog },
       text: dto.text,
     });
@@ -46,6 +46,7 @@ export class MessagesService {
       select: {
         sender: { id: true, username: true, avatarUrl: true },
         dialog: { id: true },
+        sendAt: true,
         text: true,
         id: true,
       },
