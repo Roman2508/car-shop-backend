@@ -80,6 +80,14 @@ export class AdvertisementService {
       filter.security = Raw((alias) => `${security} = ANY(${alias})`);
     }
 
+    if (Object.keys(filterParams).length) {
+      for (const key in filterParams) {
+        const values = filterParams[key].split(';');
+
+        filter[key] = Raw((alias) => values.map((v) => `${alias} LIKE '%${v}%'`).join(' OR '));
+      }
+    }
+
     return this.repository.findAndCount({
       where: { ...filterParams, ...filter },
       relations: { photos: true },
@@ -133,7 +141,7 @@ export class AdvertisementService {
   }
 
   create(dto: CreateAdvertisementDto) {
-    const photos = dto.photos ? dto.photos.map((el) => ({ id: Number(el) })) : [];
+    const photos = dto.photos ? [...new Set(dto.photos)].map((el) => ({ id: Number(el) })) : [];
 
     const newAdvertisement = {} as CreateAdvertisementDto;
 
@@ -152,8 +160,9 @@ export class AdvertisementService {
       status: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ',
       user: { id: dto.user },
       photos,
-      // photos: [],
     });
+
+    console.log(ad);
 
     return this.repository.save(ad);
   }

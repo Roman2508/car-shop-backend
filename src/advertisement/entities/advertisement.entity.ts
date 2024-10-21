@@ -83,7 +83,8 @@ export class AdvertisementEntity {
   @Column('text', { array: true, default: [] })
   security?: string[];
 
-  @OneToMany(() => FileEntity, (file) => file.ad, { onDelete: 'CASCADE' })
+  @OneToMany(() => FileEntity, (file) => file.ad)
+  // @JoinColumn({ name: 'photos' })
   photos: FileEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.advertisements)
