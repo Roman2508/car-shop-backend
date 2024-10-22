@@ -43,8 +43,19 @@ export class AdvertisementService {
   ) {}
 
   paginateAndFilter(query: any) {
-    const { limit, offset, priceFrom, priceTo, technicalCondition, comfort, multimedia, security, ...filterParams } =
-      query;
+    const {
+      limit,
+      offset,
+      priceFrom,
+      yearOfReleaseStart,
+      yearOfReleaseEnd,
+      priceTo,
+      technicalCondition,
+      comfort,
+      multimedia,
+      security,
+      ...filterParams
+    } = query;
 
     const filter = {} as any;
 
@@ -52,6 +63,7 @@ export class AdvertisementService {
       filter.title = ILike(`%${query.title}%`);
     }
 
+    /* price */
     if (priceFrom && priceTo) {
       filter.price = Between(+priceFrom, +priceTo);
     }
@@ -64,6 +76,20 @@ export class AdvertisementService {
       filter.price = LessThan(+priceTo);
     }
 
+    /* yearOfRelease */
+    if (yearOfReleaseStart && yearOfReleaseEnd) {
+      filter.price = Between(+yearOfReleaseStart, +yearOfReleaseEnd);
+    }
+
+    if (yearOfReleaseStart && !yearOfReleaseEnd) {
+      filter.price = MoreThan(+yearOfReleaseStart);
+    }
+
+    if (!yearOfReleaseStart && yearOfReleaseEnd) {
+      filter.price = LessThan(+yearOfReleaseEnd);
+    }
+
+    /*  */
     if (technicalCondition) {
       filter.technicalCondition = Raw((alias) => `${technicalCondition} = ANY(${alias})`);
     }
@@ -84,7 +110,14 @@ export class AdvertisementService {
       for (const key in filterParams) {
         const values = filterParams[key].split(';');
 
-        filter[key] = Raw((alias) => values.map((v) => `${alias} LIKE '%${v}%'`).join(' OR '));
+        if (key === 'engineVolume') {
+          filter[key] = Raw((alias) => {
+            const numbers = values.map((v) => Number(v.split(' ')[0]));
+            return numbers.map((v) => `${alias} IN (${v})`).join(' OR ');
+          });
+        } else {
+          filter[key] = Raw((alias) => values.map((v) => `${alias} LIKE '%${v}%'`).join(' OR '));
+        }
       }
     }
 
