@@ -49,6 +49,8 @@ export class AdvertisementService {
       priceFrom,
       yearOfReleaseStart,
       yearOfReleaseEnd,
+      mileageFrom,
+      mileageTo,
       priceTo,
       technicalCondition,
       comfort,
@@ -76,17 +78,30 @@ export class AdvertisementService {
       filter.price = LessThan(+priceTo);
     }
 
+    /* mileage */
+    if (mileageFrom && mileageTo) {
+      filter.mileage = Between(+mileageFrom, +mileageTo);
+    }
+
+    if (mileageFrom && !mileageTo) {
+      filter.mileage = MoreThan(+mileageFrom);
+    }
+
+    if (!mileageFrom && mileageTo) {
+      filter.mileage = LessThan(+mileageTo);
+    }
+
     /* yearOfRelease */
     if (yearOfReleaseStart && yearOfReleaseEnd) {
-      filter.price = Between(+yearOfReleaseStart, +yearOfReleaseEnd);
+      filter.yearOfRelease = Between(+yearOfReleaseStart, +yearOfReleaseEnd);
     }
 
     if (yearOfReleaseStart && !yearOfReleaseEnd) {
-      filter.price = MoreThan(+yearOfReleaseStart);
+      filter.yearOfRelease = MoreThan(+yearOfReleaseStart);
     }
 
     if (!yearOfReleaseStart && yearOfReleaseEnd) {
-      filter.price = LessThan(+yearOfReleaseEnd);
+      filter.yearOfRelease = LessThan(+yearOfReleaseEnd);
     }
 
     /*  */
