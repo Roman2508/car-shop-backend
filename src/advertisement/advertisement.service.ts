@@ -44,6 +44,7 @@ export class AdvertisementService {
 
   paginateAndFilter(query: any) {
     const {
+      first,
       limit,
       offset,
       priceFrom,
@@ -60,9 +61,22 @@ export class AdvertisementService {
     } = query;
 
     const filter = {} as any;
+    const order = {} as any;
 
     if (query.title) {
       filter.title = ILike(`%${query.title}%`);
+    }
+
+    if (first) {
+      if (first === 'cheap') {
+        order.price = 'ASC';
+      } else if (first === 'expensive') {
+        order.price = 'DESC';
+      } else if (first === 'old') {
+        order.createdAt = 'ASC';
+      } else {
+        order.createdAt = 'DESC';
+      }
     }
 
     /* price */
@@ -141,7 +155,7 @@ export class AdvertisementService {
       relations: { photos: true },
       take: limit ? limit : 20,
       skip: offset ? offset : 0,
-      // order: { id: 'ASC' },
+      order,
     });
   }
 
