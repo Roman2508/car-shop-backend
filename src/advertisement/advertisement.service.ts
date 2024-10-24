@@ -1,7 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
 import { UpdateAdvertisementDto } from './dto/update-advertisement.dto';
-import { Between, ILike, LessThan, MoreThan, Not, Raw, Repository } from 'typeorm';
+import { Between, ILike, In, LessThan, MoreThan, Not, Raw, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AdvertisementEntity } from './entities/advertisement.entity';
 
@@ -77,6 +77,8 @@ export class AdvertisementService {
       } else {
         order.createdAt = 'DESC';
       }
+    } else {
+      order.createdAt = 'DESC';
     }
 
     /* price */
@@ -151,7 +153,7 @@ export class AdvertisementService {
     }
 
     return this.repository.findAndCount({
-      where: { ...filterParams, ...filter },
+      where: { ...filterParams, ...filter, status: 'АКТИВНЕ' },
       relations: { photos: true },
       take: limit ? limit : 20,
       skip: offset ? offset : 0,
@@ -159,25 +161,29 @@ export class AdvertisementService {
     });
   }
 
-  searchByString(id: number) {
-    return `This action returns a #${id} advertisement`;
+  searchByString(title: string) {
+    return this.repository.findAndCount({
+      where: { title: ILike(`%${title}%`) },
+      relations: { photos: true },
+      take: 20,
+    });
   }
 
   getNew() {
     return this.repository.findAndCount({
       where: { status: 'АКТИВНЕ' },
+      relations: { photos: true },
       order: { createdAt: 'ASC' },
+      take: 20,
     });
   }
 
-  async getBestsellers(id: number) {
+  async getBestsellers() {
     const allRecords = await this.repository.find({ select: ['id'] });
 
     if (allRecords.length === 0) {
       return [];
     }
-
-    // const shuffledRecords = this.shuffleArray(allRecords);
 
     for (let i = allRecords.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
@@ -187,7 +193,7 @@ export class AdvertisementService {
 
     const randomIds = shuffledRecords.slice(0, 10).map((record) => record.id);
 
-    return this.repository.findByIds(randomIds);
+    return this.repository.findAndCount({ where: { id: In(randomIds) }, relations: { photos: true }, take: 20 });
   }
 
   findOne(id: number) {

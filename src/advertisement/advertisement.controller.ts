@@ -29,9 +29,24 @@ export class AdvertisementController {
     return this.advertisementService.getNotAccepted();
   }
 
+  @Get('new')
+  getNew() {
+    return this.advertisementService.getNew();
+  }
+
+  @Get('bestsellers')
+  getBestsellers() {
+    return this.advertisementService.getBestsellers();
+  }
+
   @Get(':id')
   findOne(@Param('id') id: string) {
     return this.advertisementService.findOne(+id);
+  }
+
+  @Get('/search/:title')
+  searchByString(@Param('title') title: string) {
+    return this.advertisementService.searchByString(title);
   }
 
   @Get('my/:id')
