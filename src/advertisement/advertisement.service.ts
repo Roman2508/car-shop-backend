@@ -193,7 +193,11 @@ export class AdvertisementService {
 
     const randomIds = shuffledRecords.slice(0, 10).map((record) => record.id);
 
-    return this.repository.findAndCount({ where: { id: In(randomIds) }, relations: { photos: true }, take: 20 });
+    return this.repository.findAndCount({
+      where: { id: In(randomIds), status: 'АКТИВНЕ' },
+      relations: { photos: true },
+      take: 20,
+    });
   }
 
   findOne(id: number) {

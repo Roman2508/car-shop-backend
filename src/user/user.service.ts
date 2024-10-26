@@ -1,11 +1,12 @@
-import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
+import { Repository } from 'typeorm';
+import { compare, genSalt, hash } from 'bcryptjs';
+import { InjectRepository } from '@nestjs/typeorm';
+
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
 import { UserEntity, UserRoles } from './entities/user.entity';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { compare, genSalt, hash } from 'bcryptjs';
 import { UpdateUserRoleDto } from './dto/update-user-role.dto';
+import { BadRequestException, Injectable, NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UserService {
@@ -43,19 +44,14 @@ export class UserService {
     return this.repository.save(newUser);
   }
 
-  findByFields() {
-    // знайти за username або за email
-    return `This action returns all user`;
-  }
-
   async update(id: number, dto: UpdateUserDto) {
     const existedUser = await this.findByEmail(dto.email);
 
-    if (existedUser && dto.id !== existedUser.id) {
+    if (existedUser && id !== existedUser.id) {
       throw new BadRequestException('Користувач з такою поштою вже зареєстрований');
     }
 
-    let user = await this.repository.findOne({ where: { id: dto.id } });
+    let user = await this.repository.findOne({ where: { id } });
 
     if (!user) throw new NotFoundException('Не знайдено');
 
@@ -75,7 +71,7 @@ export class UserService {
   async updateAvatar(id: number, avatarUrl: string) {
     let user = await this.repository.findOne({ where: { id } });
     if (!user) throw new NotFoundException('Не знайдено');
-    return this.repository.save({ ...user, avatarUrl });
+    await this.repository.save({ ...user, avatarUrl });
   }
 
   async updateRole(dto: UpdateUserRoleDto) {

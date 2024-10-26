@@ -8,10 +8,12 @@ import {
   ManyToMany,
   JoinTable,
   JoinColumn,
+  OneToOne,
 } from 'typeorm';
 
 import { DialogEntity } from 'src/dialogs/entities/dialog.entity';
 import { AdvertisementEntity } from 'src/advertisement/entities/advertisement.entity';
+import { FileEntity } from 'src/files/entities/file.entity';
 
 export enum UserRoles {
   ADMIN = 'ADMIN',

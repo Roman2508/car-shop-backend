@@ -62,10 +62,10 @@ export class AuthService {
     };
   }
 
-  decodeToken(token: string): { id: number; userRole: any } {
+  decodeToken(token: string): { id: number; role: any } {
     const { id, userRole } = this.jwtService.decode(token);
 
-    return { id, userRole };
+    return { id, role: userRole };
   }
 
   async getMe(token: string) {

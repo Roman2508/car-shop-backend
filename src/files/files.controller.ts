@@ -96,7 +96,7 @@ export class FilesController {
   // }
 
   @Delete(':filename/:id')
-  remove(@Param('filename') filename: string, @Param('id') id: string) {
+  remove(@Param('filename') filename: string, @Param('id') id?: string) {
     return this.filesService.remove(filename, +id);
   }
 }

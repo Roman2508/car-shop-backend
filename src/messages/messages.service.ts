@@ -44,7 +44,7 @@ export class MessagesService {
       where: { dialog: { id } },
       relations: { sender: true, dialog: true },
       select: {
-        sender: { id: true, username: true, avatarUrl: true },
+        sender: { id: true, username: true, avatarUrl: true  },
         dialog: { id: true },
         sendAt: true,
         text: true,

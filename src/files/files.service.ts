@@ -44,18 +44,21 @@ export class FilesService {
   }
 
   async uploadAvatar(file: Express.Multer.File, headers: any) {
+    const fileData = await this.create(file, headers);
     const token = headers.authorization.replace('Bearer ', '');
     const userData = this.authService.decodeToken(token);
-    this.userService.updateAvatar(userData.id, file.filename);
-    return { ...userData, avatarUrl: file.filename };
+    this.userService.updateAvatar(userData.id, fileData.filename);
+    return { ...userData, avatarUrl: fileData.filename };
   }
 
-  // findAll(adId: number) {
-  //   return this.repository.findOneBy({ ad: { id: adId } });
-  // }
+  async remove(filename: string, id?: number) {
+    let res;
 
-  async remove(filename: string, id: number) {
-    const res = await this.repository.delete(id);
+    if (id) {
+      res = await this.repository.delete(id);
+    } else {
+      res = await this.repository.delete({ filename });
+    }
 
     if (res.affected === 0) {
       throw new NotFoundException('Файл не знайдено');
