@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Between, ILike, In, LessThan, MoreThan, Not, Raw, Repository } from 'typeorm';
+import { Between, Equal, ILike, In, LessThan, MoreThan, Not, Or, Raw, Repository } from 'typeorm';
 
 import { AdvertisementEntity } from './entities/advertisement.entity';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
@@ -210,7 +210,10 @@ export class AdvertisementService {
   }
 
   getNotAccepted() {
-    return this.repository.find({ where: { status: 'ОЧІКУЄ ПІДТВЕРДЖЕННЯ' }, relations: { user: true, photos: true } });
+    return this.repository.find({
+      where: { status: Or(Equal('ОЧІКУЄ ПІДТВЕРДЖЕННЯ'), Equal('НЕАКТИВНЕ')) },
+      relations: { user: true, photos: true },
+    });
   }
 
   create(dto: CreateAdvertisementDto) {

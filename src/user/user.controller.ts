@@ -18,6 +18,16 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Get()
+  findAll() {
+    return this.userService.findAll();
+  }
+
+  @Patch('/role')
+  updateRole(@Body() dto: UpdateUserRoleDto) {
+    return this.userService.updateRole(dto);
+  }
+
   @Get(':id')
   findById(@Param('id') id: string) {
     return this.userService.findById(+id);
@@ -26,11 +36,6 @@ export class UserController {
   @Patch(':id')
   update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
     return this.userService.update(+id, updateUserDto);
-  }
-
-  @Patch('/role')
-  updateRole(@Body() dto: UpdateUserRoleDto) {
-    return this.userService.updateRole(dto);
   }
 
   @Delete(':id')

@@ -23,6 +23,10 @@ export class UserService {
     return this.repository.findOne({ where: { id } });
   }
 
+  findAll() {
+    return this.repository.find();
+  }
+
   async create(dto: CreateUserDto) {
     const salt = await genSalt(10);
 
@@ -77,7 +81,7 @@ export class UserService {
   async updateRole(dto: UpdateUserRoleDto) {
     const user = await this.repository.findOne({ where: { id: dto.id } });
     if (!user) throw new NotFoundException('Не знайдено');
-    return this.repository.save({ ...user, role: dto.newRole });
+    return this.repository.save({ ...user, role: dto.role });
   }
 
   async remove(id: number) {

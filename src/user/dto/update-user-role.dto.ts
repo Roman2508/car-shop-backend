@@ -6,5 +6,5 @@ export class UpdateUserRoleDto {
   id: number;
 
   @IsString()
-  newRole: UserRoles;
+  role: UserRoles;
 }

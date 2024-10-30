@@ -9,11 +9,11 @@ import { GetAdvertisementQueryDto } from './dto/get-advertisement.query.dto';
 
 @Controller('advertisement')
 @ApiTags('advertisement')
-@UseGuards(JwtAuthGuard)
-@ApiBearerAuth()
 export class AdvertisementController {
   constructor(private readonly advertisementService: AdvertisementService) {}
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Post()
   create(@Body() dto: CreateAdvertisementDto) {
     return this.advertisementService.create(dto);
@@ -49,20 +49,29 @@ export class AdvertisementController {
     return this.advertisementService.searchByString(title);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Get('my/:id')
   getMy(@Param('id') id: string) {
     return this.advertisementService.getMy(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Patch(':id')
   update(@Param('id') id: string, @Body() dto: UpdateAdvertisementDto) {
     return this.advertisementService.update(+id, dto);
   }
+
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Patch('accept/:id')
   accept(@Param('id') id: string) {
     return this.advertisementService.accept(+id);
   }
 
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
   @Delete(':id')
   remove(@Param('id') id: string) {
     return this.advertisementService.remove(+id);
