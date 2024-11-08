@@ -13,7 +13,6 @@ import { CreateUserDto } from 'src/user/dto/create-user.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
-  // @UseGuards(LocalAuthGuard)
   @UsePipes(new ValidationPipe())
   @HttpCode(200)
   @Post('/login')
@@ -28,7 +27,6 @@ export class AuthController {
     return this.authService.register(dto);
   }
 
-  // @ApiProperty()
   @ApiBody({ type: GetMeDto })
   @UsePipes(new ValidationPipe())
   @HttpCode(200)

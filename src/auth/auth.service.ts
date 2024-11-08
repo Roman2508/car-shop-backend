@@ -1,6 +1,6 @@
-import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 import { compare } from 'bcryptjs';
 import { JwtService } from '@nestjs/jwt';
+import { BadRequestException, Injectable, UnauthorizedException } from '@nestjs/common';
 
 import { AuthDto } from './dto/auth.dto';
 import { LoginDto } from './dto/login.dto';
@@ -36,6 +36,12 @@ export class AuthService {
     return restult;
   }
 
+  decodeToken(token: string): { id: number; role: any } {
+    const { id, userRole } = this.jwtService.decode(token);
+
+    return { id, role: userRole };
+  }
+
   async login(dto: LoginDto): Promise<any> {
     const user = await this.validateUser(dto);
 
@@ -60,12 +66,6 @@ export class AuthService {
       user: newUser,
       accessToken: await this.issueAccessToken(newUser.id),
     };
-  }
-
-  decodeToken(token: string): { id: number; role: any } {
-    const { id, userRole } = this.jwtService.decode(token);
-
-    return { id, role: userRole };
   }
 
   async getMe(token: string) {

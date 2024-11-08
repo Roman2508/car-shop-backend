@@ -238,8 +238,6 @@ export class AdvertisementService {
       photos,
     });
 
-    console.log(ad);
-
     return this.repository.save(ad);
   }
 
