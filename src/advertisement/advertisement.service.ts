@@ -1,6 +1,6 @@
 import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Between, Equal, ILike, In, LessThan, MoreThan, Not, Or, Raw, Repository } from 'typeorm';
+import { Between, Equal, ILike, In, LessThan, MoreThan, Or, Raw, Repository } from 'typeorm';
 
 import { AdvertisementEntity } from './entities/advertisement.entity';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
@@ -123,19 +123,31 @@ export class AdvertisementService {
 
     /*  */
     if (technicalCondition) {
-      filter.technicalCondition = Raw((alias) => `${technicalCondition} = ANY(${alias})`);
+      const values = technicalCondition.split(';') || [];
+      filter.technicalCondition = Raw((alias) => `${alias} && ARRAY[:...technicalCondition]`, {
+        technicalCondition: values,
+      });
     }
 
     if (comfort) {
-      filter.comfort = Raw((alias) => `${comfort} = ANY(${alias})`);
+      const values = comfort.split(';') || [];
+      filter.comfort = Raw((alias) => `${alias} && ARRAY[:...comfort]`, {
+        comfort: values,
+      });
     }
 
     if (multimedia) {
-      filter.multimedia = Raw((alias) => `${multimedia} = ANY(${alias})`);
+      const values = multimedia.split(';') || [];
+      filter.multimedia = Raw((alias) => `${alias} && ARRAY[:...multimedia]`, {
+        multimedia: values,
+      });
     }
 
     if (security) {
-      filter.security = Raw((alias) => `${security} = ANY(${alias})`);
+      const values = security.split(';') || [];
+      filter.security = Raw((alias) => `${alias} && ARRAY[:...security]`, {
+        security: values,
+      });
     }
 
     if (Object.keys(filterParams).length) {

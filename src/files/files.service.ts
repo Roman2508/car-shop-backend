@@ -16,7 +16,6 @@ export class FilesService {
     private userService: UserService,
   ) {}
 
-  // async create(file: Express.Multer.File, headers: any, adId: number) {
   async create(file: Express.Multer.File, headers: any) {
     const token = headers.authorization.replace('Bearer ', '');
     const userData = this.authService.decodeToken(token);
@@ -26,7 +25,6 @@ export class FilesService {
       originalName: file.originalname,
       size: file.size,
       mimetype: file.mimetype,
-      // ad: { id: adId },
       user: { id: userData.id },
     });
 

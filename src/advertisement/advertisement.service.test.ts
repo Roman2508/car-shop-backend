@@ -31,7 +31,7 @@ describe('AdvertisementService', () => {
     jest.clearAllMocks();
   });
 
-  it('should filter by title with ILike', async () => {
+  it('filter by title with ILike', async () => {
     const query = { title: 'Audi' };
     mockRepository.findAndCount.mockResolvedValue([[], 0]);
 
@@ -46,7 +46,7 @@ describe('AdvertisementService', () => {
     );
   });
 
-  it('should filter by price range', async () => {
+  it('filter by price range', async () => {
     const query = { priceFrom: 10000, priceTo: 20000 };
     mockRepository.findAndCount.mockResolvedValue([[], 0]);
 
@@ -61,7 +61,7 @@ describe('AdvertisementService', () => {
     );
   });
 
-  it('should filter by mileage and sort by cheapest first', async () => {
+  it('filter by mileage and sort by cheapest first', async () => {
     const query = { mileageFrom: 50000, first: 'cheap' };
     mockRepository.findAndCount.mockResolvedValue([[], 0]);
 
@@ -79,7 +79,7 @@ describe('AdvertisementService', () => {
     );
   });
 
-  it('should filter by year of release range', async () => {
+  it('filter by year of release range', async () => {
     const query = { yearOfReleaseStart: 2010, yearOfReleaseEnd: 2015 };
     mockRepository.findAndCount.mockResolvedValue([[], 0]);
 
@@ -94,7 +94,7 @@ describe('AdvertisementService', () => {
     );
   });
 
-  it('should filter by multiple array fields (technicalCondition, comfort)', async () => {
+  it('filter by multiple array fields (technicalCondition, comfort)', async () => {
     const query = { technicalCondition: 'Good', comfort: 'Air Conditioning' };
     mockRepository.findAndCount.mockResolvedValue([[], 0]);
 
