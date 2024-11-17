@@ -1,21 +1,20 @@
-import { NestFactory } from '@nestjs/core';
-import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
-import * as express from 'express';
-import { AppModule } from './app.module';
 import { join } from 'path';
+import * as express from 'express';
+import { NestFactory } from '@nestjs/core';
+import { AppModule } from './app.module';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { CorsOptions } from '@nestjs/common/interfaces/external/cors-options.interface';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule, { cors: false });
 
   const corsOptions: CorsOptions = {
-    origin: ['http://localhost:3000'],
+    origin: [process.env.CORS_ORIGIN],
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true,
   };
 
   app.enableCors(corsOptions);
-  // app.enableCors({ credentials: false, origin: true });
 
   app.use('/uploads', express.static(join(__dirname, '..', 'uploads')));
 

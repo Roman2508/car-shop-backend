@@ -2,7 +2,6 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, OneToMany, Pri
 
 import { FileEntity } from 'src/files/entities/file.entity';
 import { UserEntity } from 'src/user/entities/user.entity';
-import { DialogEntity } from 'src/dialogs/entities/dialog.entity';
 
 @Entity('advertisement')
 export class AdvertisementEntity {
@@ -70,7 +69,6 @@ export class AdvertisementEntity {
   @Column()
   varnishCoating: string;
 
-  // @Column('simple-json', { default: [] })
   @Column('text', { array: true, default: [] })
   technicalCondition: string[];
 
@@ -84,16 +82,11 @@ export class AdvertisementEntity {
   security?: string[];
 
   @OneToMany(() => FileEntity, (file) => file.ad)
-  // @JoinColumn({ name: 'photos' })
   photos: FileEntity[];
 
   @ManyToOne(() => UserEntity, (user) => user.advertisements)
   @JoinColumn({ name: 'user' })
   user: UserEntity;
-
-  // @OneToMany(() => DialogEntity, (dialog) => dialog.advertisement)
-  // @JoinColumn({ name: 'dialogs' })
-  // dialogs: DialogEntity[];
 
   @CreateDateColumn({
     type: 'timestamp',

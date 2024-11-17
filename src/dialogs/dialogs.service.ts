@@ -13,7 +13,6 @@ export class DialogsService {
   ) {}
 
   create(dto: CreateDialogDto) {
-    // Треба перевіряти чи такого діалогу ще немає
     const members = dto.members.map((el) => ({ id: Number(el) }));
     const dialog = this.repository.create({ members, advertisement: { id: dto.advertisement } });
     return this.repository.save(dialog);

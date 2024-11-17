@@ -20,7 +20,6 @@ export class FileEntity {
   mimetype: string;
 
   @ManyToOne(() => AdvertisementEntity, (ad) => ad.photos, { onDelete: 'CASCADE' })
-  // @JoinColumn({ name: 'ad' })
   ad: AdvertisementEntity;
 
   @CreateDateColumn({
