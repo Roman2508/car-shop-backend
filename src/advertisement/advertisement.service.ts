@@ -2,6 +2,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { Between, Equal, ILike, In, LessThan, MoreThan, Or, Raw, Repository } from 'typeorm';
 
+import { DialogsService } from 'src/dialogs/dialogs.service';
 import { AdvertisementEntity } from './entities/advertisement.entity';
 import { CreateAdvertisementDto } from './dto/create-advertisement.dto';
 import { UpdateAdvertisementDto } from './dto/update-advertisement.dto';
@@ -41,6 +42,8 @@ export class AdvertisementService {
   constructor(
     @InjectRepository(AdvertisementEntity)
     private repository: Repository<AdvertisementEntity>,
+
+    private dialogsService: DialogsService,
   ) {}
 
   paginateAndFilter(query: any) {
@@ -281,6 +284,7 @@ export class AdvertisementService {
   }
 
   async remove(id: number) {
+    await this.dialogsService.removeByAdId(id);
     const res = await this.repository.delete(id);
 
     if (res.affected === 0) {

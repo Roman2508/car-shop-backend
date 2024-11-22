@@ -9,5 +9,6 @@ import { DialogEntity } from './entities/dialog.entity';
   controllers: [DialogsController],
   providers: [DialogsService],
   imports: [TypeOrmModule.forFeature([DialogEntity])],
+  exports: [DialogsService],
 })
 export class DialogsModule {}

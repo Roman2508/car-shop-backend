@@ -55,4 +55,14 @@ export class DialogsService {
 
     return id;
   }
+
+  async removeByAdId(id: number) {
+    const res = await this.repository.delete({ advertisement: { id } });
+
+    if (res.affected === 0) {
+      throw new NotFoundException('Діалог не знайдено');
+    }
+
+    return id;
+  }
 }
